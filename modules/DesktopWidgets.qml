@@ -17,7 +17,12 @@ PanelWindow {
     required property ShellScreen currentScreen
     screen: currentScreen
 
-    property bool desktopShown: Hyprland.monitorFor(screen)?.activeWorkspace?.toplevels.values.length == 0 ?? true
+    property bool desktopShown: Hypr.getMonitor(screen)?.floatingOnly
+    property real animProgress: desktopShown ? 1 : 0
+
+    Behavior on animProgress {
+        Spring {}
+    }
 
     anchors {
         top: true
@@ -33,7 +38,8 @@ PanelWindow {
     Item {
         anchors.fill: parent
         anchors.margins: Sizing.sizeXXL
-        visible: root.desktopShown
+        visible: root.animProgress > 0
+        opacity: root.animProgress
 
         ClockWidget {
             id: clock

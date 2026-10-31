@@ -9,6 +9,10 @@ Scope {
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen)
     readonly property HyprlandWorkspace activeWorkspace: monitor?.activeWorkspace ?? null
 
+    readonly property list<HyprlandToplevel> toplevels: activeWorkspace?.toplevels.values ?? []
+    readonly property bool desktopOnly: toplevels.length == 0
+    readonly property bool floatingOnly: desktopOnly || toplevels.every((t) => t.lastIpcObject.floating ?? false)
+
     readonly property HyprlandToplevel focusedToplevel: {
         if (!activeWorkspace) return null;
         if (Hyprland.activeToplevel && Hyprland.activeToplevel.workspace == activeWorkspace) return Hyprland.activeToplevel;
