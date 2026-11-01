@@ -17,7 +17,7 @@ PanelWindow {
     required property ShellScreen currentScreen
     screen: currentScreen
 
-    property bool desktopShown: Hypr.getMonitor(screen)?.floatingOnly
+    property bool desktopShown: Hypr.getMonitor(screen)?.floatingOnly ?? true
     property real animProgress: desktopShown ? 1 : 0
 
     Behavior on animProgress {
