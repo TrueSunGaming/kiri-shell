@@ -20,21 +20,9 @@ ColumnLayout {
         player: root.player
     }
 
-    AccentPill {
-        RowLayout {
-            spacing: Sizing.sizeMicro
-
-            IconImage {
-                source: playerData.appIcon
-                visible: source != ""
-                Layout.fillHeight: true
-                Layout.preferredWidth: height
-            }
-
-            StyleText {
-                text: playerData.appName
-            }
-        }
+    AppPill {
+        appName: playerData.appName
+        appIcon: playerData.appIcon
     }
 
     RowLayout {
