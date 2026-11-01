@@ -45,6 +45,16 @@ ShellRoot {
         }
     }
 
+    Process {
+        running: true
+        command: ["./scripts/init_external.sh"]
+        workingDirectory: Quickshell.shellDir
+
+        stdout: SplitParser {
+            onRead: (data) => console.log(data)
+        }
+    }
+
     IpcHandler {
         target: "launcher"
 
