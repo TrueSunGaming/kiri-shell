@@ -268,13 +268,21 @@ PanelWindow {
 
                     selectable: true
 
-                    StyleText {
-                        text: Clock.long12hr
-                        verticalAlignment: Text.AlignVCenter
-                        bold: true
+                    RowLayout {
+                        spacing: Sizing.sizeMicro
+
+                        StyleText {
+                            text: Clock.long12hr
+                            verticalAlignment: Text.AlignVCenter
+                            bold: true
+                        }
+
+                        MaterialIcon {
+                            iconName: Notifs.notifIcon
+                        }
                     }
 
-                    popup: MenuBarPopup {
+                    popup: ControlCenter {
                         menuBar: root
                         menuBarItem: clockBarItem
                         open: clockBarItem.selected

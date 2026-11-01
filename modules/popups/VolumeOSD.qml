@@ -9,7 +9,7 @@ import qs.components
 import qs.data
 import qs.services
 
-MenuBarPopup {
+StandardMenuBarPopup {
     id: root
     property bool osdActive
 

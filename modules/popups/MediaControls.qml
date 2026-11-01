@@ -1,6 +1,6 @@
 import qs.components
 
-MenuBarPopup {
+StandardMenuBarPopup {
     id: root
 
     popupContent: MediaCarousel {}
