@@ -31,6 +31,7 @@ PanelWindow {
     }
     implicitHeight: Sizing.barSize
     WlrLayershell.layer: openPopups.length > 0 ? WlrLayer.Overlay : WlrLayer.Top
+    WlrLayershell.namespace: "quickshell-xray"
 
     Shortcut {
         enabled: root.selectedItem != null
