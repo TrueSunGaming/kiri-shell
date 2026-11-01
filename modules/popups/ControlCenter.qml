@@ -22,6 +22,7 @@ MenuBarPopup {
         anchors.top: parent.top
         anchors.topMargin: Sizing.sizeXXS
         anchors.horizontalCenter: parent.horizontalCenter
+        implicitWidth: mainContainer.implicitWidth
 
         opacity: root.animProgress
 
@@ -33,7 +34,8 @@ MenuBarPopup {
         spacing: Sizing.sizeXXS
 
         GlassContainer {
-
+            id: mainContainer
+            Layout.alignment: Qt.AlignRight
         }
 
         Repeater {
@@ -42,7 +44,7 @@ MenuBarPopup {
             delegate: NotifDisplay {
                 required property Notification modelData
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: mainContainer.implicitWidth
                 notif: modelData
 
                 open: false

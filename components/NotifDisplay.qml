@@ -17,33 +17,37 @@ GlassContainer {
             spacing: 0
 
             AppPill {
+                Layout.maximumWidth: Sizing.relative(parent.width, -0.5)
                 Layout.bottomMargin: Sizing.sizeMicro
                 appName: root.notif.appName
                 appIcon: root.notif.appIcon
+                text.elide: Text.ElideRight
             }
 
             StyleText {
+                Layout.fillWidth: true
                 Layout.bottomMargin: Sizing.sizeXS
                 text: root.notif.summary
                 font.pixelSize: Sizing.sizeL
                 bold: true
+                wrapMode: Text.Wrap
             }
 
             StyleText {
+                Layout.fillWidth: true
                 text: root.notif.body
+                wrapMode: Text.Wrap
             }
         }
 
-        RowLayout {
+        IconButton {
             anchors.top: parent.top
             anchors.right: parent.right
 
-            IconButton {
-                iconName: "close"
-                iconSize: Sizing.sizeL
+            iconName: "close"
+            iconSize: Sizing.sizeL
 
-                onTapped: root.notif.dismiss()
-            }
+            onTapped: root.notif.dismiss()
         }
     }
 }

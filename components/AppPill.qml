@@ -7,6 +7,7 @@ AccentPill {
 
     property string appName
     property url appIcon
+    property alias text: textItem
 
     RowLayout {
         spacing: Sizing.sizeMicro
@@ -19,6 +20,8 @@ AccentPill {
         }
 
         StyleText {
+            Layout.fillWidth: true
+            id: textItem
             text: root.appName
         }
     }
