@@ -13,18 +13,13 @@ PopupWindow {
 
     property real padding: Sizing.sizeM
     property alias container: content
-    property alias hoverHandler: hover
+    readonly property bool hovered: content.hovered
     property Item popupContent
 
     property bool open: false
     property bool grabFocus: open
-    property real animProgress: open ? 1 : 0
 
-    Behavior on animProgress {
-        Spring {}
-    }
-
-    visible: animProgress > 0
+    visible: content.animProgress > 0
     anchor.item: menuBarItem
     anchor.rect.x: menuBarItem.width / 2 - width / 2
     anchor.rect.y: Sizing.barSize - menuBarItem.y
@@ -40,40 +35,15 @@ PopupWindow {
         onCleared: root.menuBarItem.deselect()
     }
 
-    GlassRectangle {
+    GlassContainer {
         id: content
 
         anchors.top: parent.top
         anchors.topMargin: Sizing.sizeXXS
         anchors.horizontalCenter: parent.horizontalCenter
 
-        radius: root.padding
-        implicitWidth: root.popupContent != null ? contentWrapper.implicitWidth : 200
-        implicitHeight: root.popupContent != null ? contentWrapper.implicitHeight : 200
-
-        opacity: root.animProgress
-
-        WrapperItem {
-            id: contentWrapper
-
-            anchors.fill: parent
-            margin: root.padding
-            child: root.popupContent
-        }
-
-        transform: FlexScaleMatrix {
-            id: contentMatrix
-
-            rectWidth: content.width
-            rectHeight: content.height
-            origin.x: content.width / 2
-            origin.y: 0
-            topScale: 0.5 + root.animProgress / 2
-            bottomScale: root.animProgress
-        }
-
-        HoverHandler {
-            id: hover
-        }
+        content: root.popupContent
+        padding: root.padding
+        open: root.open
     }
 }

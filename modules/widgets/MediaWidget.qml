@@ -6,17 +6,8 @@ import qs.components
 import qs.data
 import qs.services
 
-GlassRectangle {
+GlassContainer {
     id: root
 
-    radius: Sizing.sizeM
-    implicitWidth: mediaWrapper.implicitWidth
-    implicitHeight: mediaWrapper.implicitHeight
-
-    WrapperItem {
-        id: mediaWrapper
-        margin: Sizing.sizeM
-
-        MediaCarousel {}
-    }
+    content: MediaCarousel {}
 }

@@ -19,7 +19,7 @@ MenuBarPopup {
         onTriggered: root.osdActive = false
     }
 
-    readonly property bool anyHover: hoverHandler.hovered
+    readonly property bool anyHover: hovered
 
     onAnyHoverChanged: {
         if (!osdActive) return;
