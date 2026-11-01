@@ -21,6 +21,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: horizontalCorrection
 
+        metrics.text: root.showSeconds ? "00:00:00 AM" : "00:00 AM"
         text: root.showSeconds ? Clock.long12hr : Clock.short12hr
         weightOverride: Font.Black
         font.pixelSize: Sizing.relative(Sizing.fontSize, 5.5)
