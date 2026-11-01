@@ -65,7 +65,7 @@ PanelWindow {
     color: "transparent"
     surfaceFormat.opaque: false
 
-    GradientRectangle {
+    GlassRectangle {
         id: launcher
 
         visible: root.animProgress > 0
