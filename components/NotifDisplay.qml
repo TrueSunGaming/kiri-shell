@@ -1,9 +1,11 @@
+import QtQuick
+import QtQuick.Layouts
+import Quickshell.Services.Notifications
+import qs.data
+
 GlassContainer {
     id: root
-
     required property Notification notif
-
-    Layout.fillWidth: true
 
     content: Item {
         implicitWidth: notifContent.implicitWidth
