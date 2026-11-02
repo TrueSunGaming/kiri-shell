@@ -199,7 +199,7 @@ PanelWindow {
                         iconName: Audio.icon
                     }
 
-                    popup: VolumeOSD {
+                    popup: VolumeControls {
                         menuBar: root
                         menuBarItem: volumeBarItem
                         open: volumeBarItem.selected || osdActive
