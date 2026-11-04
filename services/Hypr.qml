@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import qs.util
 
 Singleton {
@@ -26,7 +27,16 @@ Singleton {
 
         function onRawEvent(event: HyprlandEvent): void {
             if (event.name == "changefloatingmode") Hyprland.refreshToplevels();
+            if (event.name == "configreloaded") injectConfig.running = true;
         }
+    }
+
+    Process {
+        id: injectConfig
+
+        running: true
+        command: ["./scripts/inject_hypr.sh"]
+        workingDirectory: Quickshell.shellDir
     }
 
     function getMonitor(screen: ShellScreen): MonitorData {
