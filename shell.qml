@@ -36,6 +36,10 @@ ShellRoot {
                 currentScreen: screenScope.modelData
             }
 
+            NotificationOSD {
+                currentScreen: screenScope.modelData
+            }
+
             Component.onCompleted: root.screens.push(this)
             Component.onDestruction: {
                 const idx = root.screens.indexOf(this);

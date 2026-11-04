@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Hyprland
+import qs.modules.popups
 
 Scope {
     id: root
@@ -33,4 +34,6 @@ Scope {
     readonly property ToplevelData activeToplevel: ToplevelData {
         toplevel: root.focusedToplevel ?? root.activeToplevelFallback
     }
+
+    property ControlCenter controlCenter: null
 }

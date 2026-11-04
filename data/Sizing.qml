@@ -23,4 +23,5 @@ Singleton {
     readonly property real barSize: sizeM * 2
 
     readonly property real mediaImageSize: relative(fontSize, 5)
+    readonly property real notificationWidth: relative(fontSize, 6.5)
 }

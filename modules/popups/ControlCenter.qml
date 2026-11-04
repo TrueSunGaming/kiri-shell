@@ -4,9 +4,12 @@ import Quickshell.Services.Notifications
 import qs.components
 import qs.data
 import qs.services
+import qs.util
 
 MenuBarPopup {
     id: root
+
+    implicitHeight: screen.height - Sizing.barSize - Sizing.sizeMicro
 
     property real animProgress: open ? 1 : 0
 
@@ -19,9 +22,8 @@ MenuBarPopup {
     ColumnLayout {
         id: content
 
-        anchors.top: parent.top
+        anchors.fill: parent
         anchors.topMargin: Sizing.sizeXXS
-        anchors.horizontalCenter: parent.horizontalCenter
         implicitWidth: mainContainer.implicitWidth
 
         opacity: root.animProgress
@@ -35,27 +37,40 @@ MenuBarPopup {
 
         GlassContainer {
             id: mainContainer
-            Layout.alignment: Qt.AlignRight
+            implicitWidth: Sizing.notificationWidth
         }
 
-        Repeater {
+        ListView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            clip: true
+            spacing: Sizing.sizeXXS
+
             model: Notifs.notifications
 
             delegate: NotifDisplay {
                 required property Notification modelData
-
-                Layout.preferredWidth: mainContainer.implicitWidth
                 notif: modelData
-
-                open: false
-                Component.onCompleted: open = true
-
-                Behavior on y {
-                    Spring {}
-                }
+                implicitWidth: mainContainer.implicitWidth
             }
         }
     }
 
     contentContainer: content
+
+    property MonitorData lastMonitor: null
+
+    function addToMonitor(): void {
+        if (lastMonitor?.controlCenter == this) lastMonitor.controlCenter = null;
+
+        const monitor = Hypr.getMonitor(screen);
+        if (!monitor) return;
+        monitor.controlCenter = this;
+        lastMonitor = monitor;
+        console.log(monitor.screen.name);
+    }
+
+    onScreenChanged: addToMonitor()
+    Component.onCompleted: addToMonitor()
 }

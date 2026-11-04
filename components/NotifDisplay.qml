@@ -7,6 +7,32 @@ GlassContainer {
     id: root
     required property Notification notif
 
+    Layout.preferredHeight: implicitHeight * animProgress
+
+    open: false
+    Component.onCompleted: open = true
+
+    property bool closeOnZeroAnim: false
+    property bool dismissOnClose: false
+    property bool destructible: false
+
+    function close(): void {
+        closeOnZeroAnim = true;
+        open = false;
+    }
+
+    function closeAndDismiss(): void {
+        dismissOnClose = true;
+        close();
+    }
+
+    onAnimProgressChanged: {
+        if (animProgress <= 0 && closeOnZeroAnim) {
+            if (dismissOnClose) notif.dismiss();
+            if (destructible) destroy();
+        }
+    }
+
     content: Item {
         implicitWidth: notifContent.implicitWidth
         implicitHeight: notifContent.implicitHeight
@@ -47,7 +73,7 @@ GlassContainer {
             iconName: "close"
             iconSize: Sizing.sizeL
 
-            onTapped: root.notif.dismiss()
+            onTapped: root.closeAndDismiss()
         }
     }
 }
