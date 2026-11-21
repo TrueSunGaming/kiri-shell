@@ -24,7 +24,7 @@ Scope {
     readonly property real length: player?.length ?? 0
     readonly property string lengthFmt: formatLength(length)
 
-    readonly property DesktopEntry desktopEntry: player ? Apps.heuristicLookup(player.desktopEntry) : null
+    readonly property DesktopEntry desktopEntry: player ? (Apps.heuristicLookup(player.desktopEntry) ?? Apps.heuristicLookup(player.identity)) : null
     readonly property string appName: (desktopEntry?.name || player?.identity) ?? ""
     readonly property string appIcon: Quickshell.iconPath(desktopEntry?.icon, true)
 
