@@ -7,6 +7,7 @@ StyleText {
 
     color: Colors.shield
     style: Text.Normal
+    layer.enabled: true
 
     Text {
         text: root.text
@@ -15,4 +16,6 @@ StyleText {
         style: Text.Outline
         styleColor: Colors.glassBorder
     }
+
+    NoiseShader {}
 }

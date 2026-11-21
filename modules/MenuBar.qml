@@ -39,13 +39,14 @@ PanelWindow {
         onActivated: root.selectedItem = null
     }
 
-    color: Colors.shield
+    color: "transparent"
     surfaceFormat.opaque: false
 
     Rectangle {
         anchors.fill: parent
+        layer.enabled: true
 
-        color: "transparent"
+        color: Colors.shield
 
         Rectangle {
             anchors.left: parent.left
@@ -54,6 +55,8 @@ PanelWindow {
             implicitHeight: 1
             color: Colors.glassBorder
         }
+
+        NoiseShader {}
 
         Item {
             anchors.fill: parent
