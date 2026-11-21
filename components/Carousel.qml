@@ -69,7 +69,11 @@ Item {
             model: root.model
             delegate: root.delegate
 
-            onItemAdded: root.repeaterUpdateChanged()
+            onItemAdded: (_, item) => {
+                root.repeaterUpdateChanged()
+                // scroll offset is negative
+                item.opacity = Qt.binding(() => 1 - Math.abs(scrollOffset + item.x) / item.width);
+            }
             onItemRemoved: root.repeaterUpdateChanged()
         }
     }
