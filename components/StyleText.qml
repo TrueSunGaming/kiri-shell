@@ -18,7 +18,7 @@ Text {
 
     TextMetrics {
         id: textMetrics
-        text: root.text
+        text: root.text ?? ""
         font: root.font
     }
 

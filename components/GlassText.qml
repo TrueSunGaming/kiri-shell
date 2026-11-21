@@ -10,12 +10,24 @@ StyleText {
     layer.enabled: true
 
     Text {
-        text: root.text
+        text: root.text ?? ""
         font: root.font
         color: "transparent"
         style: Text.Outline
         styleColor: Colors.glassBorder
     }
 
-    NoiseShader {}
+    Text {
+        id: maskText
+        anchors.fill: parent
+        text: root.text ?? ""
+        font: root.font
+        color: root.color
+        style: root.style
+        styleColor: root.styleColor
+    }
+
+    NoiseShader {
+        maskItem: maskText
+    }
 }

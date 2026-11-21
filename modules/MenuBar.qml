@@ -56,7 +56,18 @@ PanelWindow {
             color: Colors.glassBorder
         }
 
-        NoiseShader {}
+        Rectangle {
+            id: maskRect
+            anchors.fill: parent
+            color: parent.color
+            border.width: parent.border.width
+            border.color: parent.border.color
+            radius: parent.radius
+        }
+
+        NoiseShader {
+            maskItem: maskRect
+        }
 
         Item {
             anchors.fill: parent

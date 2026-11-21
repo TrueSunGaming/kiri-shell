@@ -2,12 +2,22 @@ import QtQuick
 import qs.data
 
 Rectangle {
-    id: rect
+    id: root
 
     color: Colors.shield
     border.color: Colors.glassBorder
     border.width: 1
-    layer.enabled: true
 
-    NoiseShader {}
+    Rectangle {
+        id: maskRect
+        anchors.fill: parent
+        radius: root.radius
+        color: root.color
+        border.width: root.border.width
+        border.color: root.border.color
+    }
+
+    NoiseShader {
+        maskItem: maskRect
+    }
 }
