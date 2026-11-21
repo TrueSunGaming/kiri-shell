@@ -49,7 +49,7 @@ Item {
         setIndex(currentIndex + amount);
     }
 
-    property real scrollOffset: -currentItem?.x ?? 0
+    property real scrollOffset: -(currentItem?.x ?? 0)
 
     Behavior on scrollOffset {
         Spring {}
