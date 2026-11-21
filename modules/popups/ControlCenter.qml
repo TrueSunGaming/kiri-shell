@@ -68,7 +68,6 @@ MenuBarPopup {
         if (!monitor) return;
         monitor.controlCenter = this;
         lastMonitor = monitor;
-        console.log(monitor.screen.name);
     }
 
     onScreenChanged: addToMonitor()
