@@ -18,15 +18,39 @@ PanelWindow {
     property bool open: false
     property real animProgress: open ? 1 : 0
     property int selectedIndex: 0
+    property var entries: []
+    property var items: []
+    readonly property Component launcherItemComponent: LauncherItem {}
 
-    onSelectedIndexChanged: appList.positionViewAtIndex(selectedIndex, ListView.Contain)
+    Timer {
+        id: rebuildTimer
+
+        interval: 0
+        onTriggered: {
+            root.refreshEntries();
+            root.rebuildList();
+        }
+    }
+
+    onSelectedIndexChanged: {
+        const item = root.items[root.selectedIndex];
+        if (!item) return;
+        const top = item.y;
+        const bottom = item.y + item.height;
+        if (top < appList.contentY) appList.contentY = top;
+        else if (bottom > appList.contentY + appList.height) appList.contentY = bottom - appList.height;
+    }
 
     onOpenChanged: {
         if (open) {
             searchBox.text = "";
-            appList.positionViewAtBeginning();
+            appList.contentY = 0;
             searchBox.focus = true;
             selectedIndex = 0;
+            rebuildTimer.restart();
+        } else {
+            rebuildTimer.stop();
+            clearItems();
         }
     }
 
@@ -38,6 +62,30 @@ PanelWindow {
         if (!entry) return;
         Quickshell.execDetached({ command: entry.command, workingDirectory: Quickshell.env("HOME") });
         root.open = false;
+    }
+
+    function refreshEntries(): void {
+        root.entries = Fuzzy.fuzzySearch(DesktopEntries.applications.values, searchBox.text, app => app.name);
+    }
+
+    function clearItems(): void {
+        for (const item of root.items) item.destroy();
+        root.items = [];
+    }
+
+    function rebuildList(): void {
+        if (!appColumn) return;
+        clearItems();
+        for (let i = 0; i < root.entries.length; i++) {
+            const result = root.entries[i];
+            const item = root.launcherItemComponent.createObject(appColumn, {
+                index: i,
+                name: Fuzzy.toRichText(result, Colors.toHex(Colors.accent)),
+                description: result.item.comment,
+                icon: result.item.icon
+            });
+            if (item) root.items.push(item);
+        }
     }
 
     anchors {
@@ -93,24 +141,28 @@ PanelWindow {
 
             StyleTextField {
                 id: searchBox
+
                 Layout.fillWidth: true
                 font.pixelSize: Sizing.sizeXL
-                error: (appList.model?.values.length ?? 0) == 0
+                error: root.entries.length == 0
 
-                onTextChanged: root.selectedIndex = 0
+                onTextChanged: {
+                    root.selectedIndex = 0;
+                    if (root.open) rebuildTimer.restart();
+                }
 
                 Keys.onEscapePressed: root.open = false
                 Keys.onUpPressed: {
-                    if (!appList.model || appList.model.values.length == 0) return;
+                    if (root.entries.length == 0) return;
                     if (root.selectedIndex > 0) root.selectedIndex--;
-                    else root.selectedIndex = appList.model.values.length - 1;
+                    else root.selectedIndex = root.entries.length - 1;
                 }
                 Keys.onDownPressed: {
-                    if (appList.model.values.length == 0) return;
-                    if (root.selectedIndex < appList.model.values.length - 1) root.selectedIndex++;
+                    if (root.entries.length == 0) return;
+                    if (root.selectedIndex < root.entries.length - 1) root.selectedIndex++;
                     else root.selectedIndex = 0;
                 }
-                Keys.onReturnPressed: root.openEntry(appList.model.values[root.selectedIndex].item)
+                Keys.onReturnPressed: root.openEntry(root.entries[root.selectedIndex].item)
             }
 
             Rectangle {
@@ -121,34 +173,20 @@ PanelWindow {
                 color: Colors.glassBorder
             }
 
-            ListView {
+            Flickable {
                 id: appList
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
+                contentWidth: width
+                contentHeight: appColumn.implicitHeight
 
-                spacing: Sizing.sizeXXS
+                ColumnLayout {
+                    id: appColumn
 
-                model: ScriptModel {
-                    values: {
-                        return Fuzzy.fuzzySearch(DesktopEntries.applications.values, searchBox.text, app => app.name);
-                    }
-
-                    // FIXME: setting this makes the indices not update when search updates
-                    // objectProp: "text"
-                }
-
-                Component.onDestruction: model = undefined
-
-                delegate: LauncherItem {
-                    id: appDelegate
-
-                    required property var modelData
-
-                    name: Fuzzy.toRichText(modelData, Colors.toHex(Colors.accent))
-                    description: modelData.item.comment
-                    icon: modelData.item.icon
+                    width: parent.width
+                    spacing: Sizing.sizeXXS
                 }
             }
         }
@@ -163,9 +201,10 @@ PanelWindow {
         property url icon
         readonly property bool selected: root.selectedIndex == index
 
+        Layout.fillWidth: true
+
         color: Colors.subShield
         padding: Sizing.sizeM
-        width: searchBox.width
 
         content: RowLayout {
             spacing: Sizing.sizeXXS

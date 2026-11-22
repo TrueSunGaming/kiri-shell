@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 import qs.components
 import qs.data
@@ -8,6 +9,17 @@ import qs.util
 
 MenuBarPopup {
     id: root
+
+    readonly property string screenName: screen.name
+
+    Connections {
+        target: Hyprland
+
+        function onRawEvent(event: HyprlandEvent): void {
+            if (event.name == "monitorremoved" && event.data == root.screenName)
+                notifRepeater.model = [];
+        }
+    }
 
     implicitHeight: screen.height - Sizing.barSize - Sizing.sizeMicro
 
@@ -40,22 +52,30 @@ MenuBarPopup {
             implicitWidth: Sizing.notificationWidth
         }
 
-        ListView {
+        Flickable {
             Layout.fillWidth: true
             Layout.fillHeight: true
-
             clip: true
-            spacing: Sizing.sizeXXS
+            contentWidth: width
+            contentHeight: notifListColumn.implicitHeight
 
-            model: Notifs.notifications
+            ColumnLayout {
+                id: notifListColumn
+                width: parent.width
+                spacing: Sizing.sizeXXS
 
-            delegate: NotifDisplay {
-                required property Notification modelData
-                notif: modelData
-                implicitWidth: mainContainer.implicitWidth
+                Repeater {
+                    id: notifRepeater
+                    model: Notifs.notifications
+
+                    NotifDisplay {
+                        required property Notification modelData
+
+                        Layout.fillWidth: true
+                        notif: modelData
+                    }
+                }
             }
-
-            Component.onDestruction: model = undefined
         }
     }
 

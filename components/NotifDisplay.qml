@@ -6,6 +6,7 @@ import qs.data
 GlassContainer {
     id: root
     required property Notification notif
+    signal finished()
 
     Layout.preferredHeight: implicitHeight * animProgress
 
@@ -14,7 +15,6 @@ GlassContainer {
 
     property bool closeOnZeroAnim: false
     property bool dismissOnClose: false
-    property bool destructible: false
 
     function close(): void {
         closeOnZeroAnim = true;
@@ -29,7 +29,7 @@ GlassContainer {
     onAnimProgressChanged: {
         if (animProgress <= 0 && closeOnZeroAnim) {
             if (dismissOnClose) notif.dismiss();
-            if (destructible) destroy();
+            finished();
         }
     }
 
