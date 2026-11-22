@@ -122,6 +122,14 @@ border, a masked noise grain, and compositor-level blur.
   don't copy them into new code. Fix them deliberately when touching that area, or
   leave a clear note explaining why they remain.
 
+## Code style
+
+- Use loose equality (`==` / `!=`) for ordinary comparisons. Reserve strict equality
+  (`===` / `!==`) for cases where operands can have different types and that
+  distinction is the point of the check.
+- Don't write comments. Prefer clear names, small scopes, and structure that explains
+  itself; add a comment only when the user explicitly asks for one.
+
 ## Where to make common changes
 
 Find the owner by responsibility; treat the names below as current landmarks to
@@ -175,4 +183,6 @@ verify, not as a fixed map.
 - Side effects in services/scripts, views declarative.
 - Bindings preserved after user edits.
 - New semantic values added to their central map/token set.
+- Loose equality used unless the type distinction matters.
+- No new comments.
 - Source verified; this document changed only if guidance, not details, changed.

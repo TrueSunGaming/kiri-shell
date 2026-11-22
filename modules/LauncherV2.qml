@@ -95,13 +95,13 @@ PanelWindow {
                 id: searchBox
                 Layout.fillWidth: true
                 font.pixelSize: Sizing.sizeXL
-                error: appList.model.values.length == 0
+                error: (appList.model?.values.length ?? 0) == 0
 
                 onTextChanged: root.selectedIndex = 0
 
                 Keys.onEscapePressed: root.open = false
                 Keys.onUpPressed: {
-                    if (appList.model.values.length == 0) return;
+                    if (!appList.model || appList.model.values.length == 0) return;
                     if (root.selectedIndex > 0) root.selectedIndex--;
                     else root.selectedIndex = appList.model.values.length - 1;
                 }
@@ -138,6 +138,8 @@ PanelWindow {
                     // FIXME: setting this makes the indices not update when search updates
                     // objectProp: "text"
                 }
+
+                Component.onDestruction: model = undefined
 
                 delegate: LauncherItem {
                     id: appDelegate

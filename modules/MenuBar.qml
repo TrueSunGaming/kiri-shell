@@ -81,12 +81,12 @@ PanelWindow {
                 spacing: 0
 
                 RowLayout {
-                    visible: root.monitor.activeToplevel.toplevel != null
+                    visible: root.monitor?.activeToplevel?.toplevel != null
                     spacing: 0
 
                     MenuBarItem {
                         tappable: true
-                        onTapped: root.monitor.activeToplevel.close()
+                        onTapped: root.monitor?.activeToplevel?.close()
 
                         tooltip: "Close"
 
@@ -97,12 +97,12 @@ PanelWindow {
 
                     MenuBarItem {
                         tappable: true
-                        onTapped: root.monitor.activeToplevel.toggleFloating()
+                        onTapped: root.monitor?.activeToplevel?.toggleFloating()
 
-                        tooltip: root.monitor.activeToplevel.floating ? "Make tiling" : "Make floating"
+                        tooltip: root.monitor?.activeToplevel?.floating ? "Make tiling" : "Make floating"
 
                         MaterialIcon {
-                            iconName: root.monitor.activeToplevel.floating ? "float_off" : "float_on"
+                            iconName: root.monitor?.activeToplevel?.floating ? "float_off" : "float_on"
                         }
                     }
 
@@ -118,9 +118,9 @@ PanelWindow {
                     }
 
                     MenuBarItem {
-                        visible: !root.monitor.activeToplevel.isolated
+                        visible: root.monitor?.activeToplevel != null && !root.monitor.activeToplevel.isolated
                         tappable: true
-                        onTapped: root.monitor.activeToplevel.moveToNewWorkspace()
+                        onTapped: root.monitor?.activeToplevel?.moveToNewWorkspace()
 
                         tooltip: "Isolate"
 
@@ -138,7 +138,7 @@ PanelWindow {
                             spacing: Sizing.sizeMicro
 
                             IconImage {
-                                source: root.monitor.activeToplevel.icon
+                                source: root.monitor?.activeToplevel?.icon ?? ""
                                 visible: source != ""
                                 Layout.fillHeight: true
                                 Layout.preferredWidth: height
@@ -147,7 +147,7 @@ PanelWindow {
                             StyleText {
                                 Layout.fillHeight: true
                                 Layout.preferredWidth: Sizing.relative(Sizing.fontSize, 7)
-                                text: root.monitor.activeToplevel.toplevel?.title ?? ""
+                                text: root.monitor?.activeToplevel?.toplevel?.title ?? ""
                                 bold: true
                                 elide: Text.ElideMiddle
                             }
@@ -326,7 +326,7 @@ PanelWindow {
         onPopupOpenChanged: {
             if (!popupOpen) {
                 const index = root.openPopups.indexOf(popup);
-                if (!index != -1) root.openPopups.splice(index, 1);
+                if (index != -1) root.openPopups.splice(index, 1);
                 return;
             }
 

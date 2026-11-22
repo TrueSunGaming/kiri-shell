@@ -18,7 +18,10 @@ Singleton {
             screen: modelData
 
             Component.onCompleted: root.monitors.push(this)
-            Component.onDestruction: root.monitors.splice(root.monitors.indexOf(this), 1)
+            Component.onDestruction: {
+                const idx = root.monitors.indexOf(this);
+                if (idx >= 0) root.monitors.splice(idx, 1);
+            }
         }
     }
 

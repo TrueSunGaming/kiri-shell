@@ -54,6 +54,8 @@ MenuBarPopup {
                 notif: modelData
                 implicitWidth: mainContainer.implicitWidth
             }
+
+            Component.onDestruction: model = undefined
         }
     }
 
@@ -63,6 +65,7 @@ MenuBarPopup {
 
     function addToMonitor(): void {
         if (lastMonitor?.controlCenter == this) lastMonitor.controlCenter = null;
+        lastMonitor = null;
 
         const monitor = Hypr.getMonitor(screen);
         if (!monitor) return;
@@ -70,6 +73,12 @@ MenuBarPopup {
         lastMonitor = monitor;
     }
 
+    function detachFromMonitor(): void {
+        if (lastMonitor?.controlCenter == this) lastMonitor.controlCenter = null;
+        lastMonitor = null;
+    }
+
     onScreenChanged: addToMonitor()
     Component.onCompleted: addToMonitor()
+    Component.onDestruction: detachFromMonitor()
 }

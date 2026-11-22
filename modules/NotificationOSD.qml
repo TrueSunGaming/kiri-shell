@@ -48,6 +48,14 @@ PanelWindow {
         }
     }
 
+    function clearAlerts(): void {
+        const alerts = [...notifColumn.children];
+        for (const alert of alerts)
+        alert.destroy();
+    }
+
+    Component.onDestruction: clearAlerts()
+
     Component {
         id: notifAlert
 
