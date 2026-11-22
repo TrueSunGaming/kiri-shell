@@ -99,8 +99,6 @@ PanelWindow {
                 id: searchBox
                 Layout.fillWidth: true
                 font.pixelSize: Sizing.sizeXXL
-                padding: 0
-                background: null
                 error: appList.model.values.length == 0
 
                 onTextChanged: root.selectedIndex = 0;

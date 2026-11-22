@@ -15,8 +15,8 @@ Singleton {
 
     readonly property color error: Qt.hsla(0, 0.8, 0.5, 1)
 
-    readonly property color shield: createShield(0.29, 0.1)
-    readonly property color inverseShield: createShield(0.05, 0.45)
+    readonly property color shield: createShield(0.32, 0.08)
+    readonly property color subShield: Qt.alpha(shield, shield.a / 2)
 
     readonly property real glassBorderOpacity: shield.a / 1.5
     readonly property color glassBorder: Qt.alpha(Qt.lighter(shield, 2.5), glassBorderOpacity)

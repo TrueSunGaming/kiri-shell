@@ -24,7 +24,7 @@ Text {
 
     color: Colors.text
     style: Text.Raised
-    styleColor: Qt.alpha(Qt.darker(color, 5), 0.7)
+    styleColor: Qt.alpha("black", 0.7)
 
     font {
         family: Fonts.defaultFont.font.family

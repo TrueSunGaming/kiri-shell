@@ -21,13 +21,13 @@ ShellRoot {
 
             required property ShellScreen modelData
 
-            property Launcher launcher: i_launcher
+            property LauncherV2 launcher: i_launcher
 
             MenuBar {
                 currentScreen: screenScope.modelData
             }
 
-            Launcher {
+            LauncherV2 {
                 id: i_launcher
                 currentScreen: screenScope.modelData
             }
