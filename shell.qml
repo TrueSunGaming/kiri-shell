@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
 import QtQuick
+import KiriPlugin
 import qs.modules
 import qs.components
 
@@ -48,6 +49,8 @@ ShellRoot {
             }
         }
     }
+
+    Hello {}
 
     IpcHandler {
         target: "launcher"

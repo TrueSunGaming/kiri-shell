@@ -4,6 +4,7 @@
 
 pkill quickshell
 pkill qs
+hyprctl reload
 
 project_dir="$(dirname "$0")/.."
 qs -p $project_dir &
@@ -12,7 +13,7 @@ qs_pid=$!
 sleep 1
 hyprctl eval 'hl.monitor({ output = "DP-5", disabled = true })' >/dev/null
 sleep 1
-hyprctl reload >/dev/null
+hyprctl reload >/dev/null #re-enables monitor
 sleep 1
 
 if ! kill -0 "$qs_pid" 2>/dev/null; then
@@ -23,5 +24,6 @@ else
     echo "Test passed"
 fi
 
+# removes error popups
 pkill qs
 pkill quickshell
