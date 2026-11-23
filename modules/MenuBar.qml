@@ -53,7 +53,7 @@ PanelWindow {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             implicitHeight: 1
-            color: Colors.glassBorder
+            color: Colors.createGlassBorder(parent.color)
         }
 
         Rectangle {

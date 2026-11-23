@@ -5,7 +5,7 @@ Rectangle {
     id: root
 
     color: Colors.shield
-    border.color: Colors.glassBorder
+    border.color: Colors.createGlassBorder(color)
     border.width: 1
 
     Rectangle {

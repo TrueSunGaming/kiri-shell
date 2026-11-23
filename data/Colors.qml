@@ -15,19 +15,39 @@ Singleton {
 
     readonly property color error: Qt.hsla(0, 0.8, 0.5, 1)
 
-    readonly property color shield: Qt.tint(createShield(0.32, 0.08), Qt.alpha(accent, 0.08))
-    readonly property color subShield: Qt.alpha(shield, shield.a / 2)
+    readonly property color baseShield: createShield(0.32, 0.08)
+    readonly property real shieldTint: 0.07
+    readonly property color shield: createAccentShield(shieldTint)
+    readonly property color subShield: createSubShield(shield)
+    readonly property real accentShieldTint: 0.5
+    readonly property color accentShield: createAccentShield(accentShieldTint)
+    readonly property color accentSubShield: createSubShield(accentShield)
 
-    readonly property real glassBorderOpacity: shield.a / 1.5
-    readonly property color glassBorder: Qt.alpha(Qt.lighter(shield, 2.5), glassBorderOpacity)
+    readonly property real glassBorderOpacity: 0.5
 
     readonly property color popupGradStart: Qt.alpha("#202020", 0.4)
     readonly property color popupGradEnd: Qt.alpha("#282828", 0.45)
+
+    function tintConstAlpha(base: color, tint: color): color {
+        return Qt.alpha(Qt.tint(base, tint), base.a);
+    }
 
     function createShield(dark: real, light: real): color {
         const alpha = dark + light;
         const brightness = light / alpha;
         return Qt.rgba(brightness, brightness, brightness, alpha / 3 + 0.33);
+    }
+
+    function createSubShield(shield: color): color {
+        return Qt.alpha(shield, shield.a / 2);
+    }
+
+    function createAccentShield(tint: real): color {
+        return tintConstAlpha(baseShield, Qt.alpha(accent, tint));
+    }
+
+    function createGlassBorder(shield: color): color {
+        return Qt.alpha(Qt.lighter(shield, 2.5), shield.a * glassBorderOpacity);
     }
 
     function blendColor(c1: color, c2: color, ratio: real): color {

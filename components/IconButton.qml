@@ -10,7 +10,7 @@ WrapperRectangle {
 
     property bool enabled: true
     property string iconName
-    property real iconSize: Sizing.relative(Sizing.fontSize, 2)
+    property real iconSize: Sizing.sizeXXL
 
     property real bgOpacity: tapHandler.pressed ? 0.18 : hoverHandler.hovered ? 0.12 : 0
 

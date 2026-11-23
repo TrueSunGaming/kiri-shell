@@ -197,7 +197,7 @@ PanelWindow {
                 Layout.preferredHeight: 1
                 Layout.topMargin: Sizing.sizeMicro
                 Layout.bottomMargin: Sizing.sizeM
-                color: Colors.glassBorder
+                color: launcher.border.color
             }
 
             Flickable {
@@ -231,7 +231,13 @@ PanelWindow {
 
         Layout.fillWidth: true
 
-        color: Colors.subShield
+        property real tint: selected ? Colors.accentShieldTint : Colors.shieldTint
+
+        Behavior on tint {
+            Spring {}
+        }
+
+        color: Colors.createSubShield(Colors.createAccentShield(tint))
         padding: Sizing.sizeM
 
         content: RowLayout {

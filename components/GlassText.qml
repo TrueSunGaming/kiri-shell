@@ -14,7 +14,7 @@ StyleText {
         font: root.font
         color: "transparent"
         style: Text.Outline
-        styleColor: Colors.glassBorder
+        styleColor: Colors.createGlassBorder(root.color)
     }
 
     Text {
