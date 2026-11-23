@@ -4,6 +4,6 @@ pkill quickshell
 pkill qs
 rm -rf ~/.cache/quickshell/
 
-export QML_IMPORT_PATH="$(dirname "$0")/plugin/build"
-echo $QML_IMPORT_PATH
-qs -p . &
+kiri_path=$(dirname "$0")
+export QML_IMPORT_PATH="$kiri_path/plugin/build"
+qs -p $kiri_path &

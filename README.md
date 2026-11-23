@@ -5,15 +5,7 @@
 A frosted glass-themed utilitarian desktop shell built for Hyprland.
 
 ## Dependencies
-User dependencies:
-* Hyprland 0.57 (Lua config)
-* Qt 6.12
-* Quickshell 0.3.2
-
-Additional dev dependencies:
-* CMake
-* Clang
-* `qt6-shadertools`
+* tba
 
 ## Installation
 
