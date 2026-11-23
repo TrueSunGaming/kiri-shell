@@ -13,7 +13,7 @@ Singleton {
 
     readonly property var jsonData: JSON.parse(jsonFile.text())
 
-    function getIcon(name): string {
+    function getIcon(name: string): string {
         return jsonData[name] ?? "";
     }
 }

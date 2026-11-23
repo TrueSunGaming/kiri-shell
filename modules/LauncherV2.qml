@@ -7,6 +7,7 @@ import Quickshell.Widgets
 import qs.components
 import qs.data
 import qs.services
+import qs.util
 import "../util/fuzzySearch.js" as Fuzzy
 
 PanelWindow {
@@ -18,8 +19,20 @@ PanelWindow {
     property bool open: false
     property real animProgress: open ? 1 : 0
     property int selectedIndex: 0
+    property var selectedItem: entries[selectedIndex]?.item ?? null
     property var entries: []
     property var items: []
+
+    readonly property string searchMode: {
+        if (searchBox.text.trim().startsWith(">")) return "script";
+        return "app";
+    }
+
+    readonly property string searchText: {
+        if (searchMode == "script") return searchBox.text.slice(1).trim();
+        return searchBox.text.trim();
+    }
+
     readonly property Component launcherItemComponent: LauncherItem {}
 
     Timer {
@@ -61,11 +74,24 @@ PanelWindow {
     function openEntry(entry: DesktopEntry): void {
         if (!entry) return;
         Quickshell.execDetached({ command: entry.command, workingDirectory: Quickshell.env("HOME") });
+    }
+
+    function openSelected(): void {
+        if (selectedItem instanceof DesktopEntry) openEntry(selectedItem);
+        if (selectedItem instanceof ScriptData) selectedItem.run();
         root.open = false;
     }
 
     function refreshEntries(): void {
-        root.entries = Fuzzy.fuzzySearch(DesktopEntries.applications.values, searchBox.text, app => app.name);
+        switch(root.searchMode) {
+            case "script":
+            root.entries = Fuzzy.fuzzySearch(Scripts.scripts.values, searchText, app => app.name);
+            break;
+
+            case "app":
+            root.entries = Fuzzy.fuzzySearch(DesktopEntries.applications.values, searchText, app => app.name);
+            break;
+        }
     }
 
     function clearItems(): void {
@@ -79,10 +105,11 @@ PanelWindow {
         for (let i = 0; i < root.entries.length; i++) {
             const result = root.entries[i];
             const item = root.launcherItemComponent.createObject(appColumn, {
-                index: i,
-                name: Fuzzy.toRichText(result, Colors.toHex(Colors.accent)),
-                description: result.item.comment,
-                icon: result.item.icon
+                    index: i,
+                    name: Fuzzy.toRichText(result, Colors.toHex(Colors.accent)),
+                    description: result.item.comment,
+                    icon: result.item.icon,
+                    materialIcon: result.item instanceof ScriptData
             });
             if (item) root.items.push(item);
         }
@@ -162,7 +189,7 @@ PanelWindow {
                     if (root.selectedIndex < root.entries.length - 1) root.selectedIndex++;
                     else root.selectedIndex = 0;
                 }
-                Keys.onReturnPressed: root.openEntry(root.entries[root.selectedIndex].item)
+                Keys.onReturnPressed: root.openSelected()
             }
 
             Rectangle {
@@ -199,6 +226,7 @@ PanelWindow {
         required property string name
         property string description
         property url icon
+        property bool materialIcon: false
         readonly property bool selected: root.selectedIndex == index
 
         Layout.fillWidth: true
@@ -219,6 +247,17 @@ PanelWindow {
                 source: icon
                 implicitSize: Sizing.sizeXL
                 asynchronous: true
+                visible: !launcherItem.materialIcon
+            }
+
+            MaterialIcon {
+                Layout.preferredWidth: implicitSize
+                Layout.fillHeight: false
+                Layout.alignment: Qt.AlignTop
+
+                iconName: launcherItem.icon
+                implicitSize: Sizing.sizeXL
+                visible: launcherItem.materialIcon
             }
 
             ColumnLayout {
