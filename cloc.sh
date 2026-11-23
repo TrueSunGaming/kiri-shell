@@ -1,0 +1,1 @@
+cloc $(dirname "$0") --exclude-dir=build
