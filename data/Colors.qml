@@ -15,7 +15,7 @@ Singleton {
 
     readonly property color error: Qt.hsla(0, 0.8, 0.5, 1)
 
-    readonly property color shield: createShield(0.32, 0.08)
+    readonly property color shield: Qt.tint(createShield(0.32, 0.08), Qt.alpha(accent, 0.08))
     readonly property color subShield: Qt.alpha(shield, shield.a / 2)
 
     readonly property real glassBorderOpacity: shield.a / 1.5
@@ -27,7 +27,7 @@ Singleton {
     function createShield(dark: real, light: real): color {
         const alpha = dark + light;
         const brightness = light / alpha;
-        return Qt.rgba(brightness, brightness, brightness, alpha);
+        return Qt.rgba(brightness, brightness, brightness, alpha / 3 + 0.33);
     }
 
     function blendColor(c1: color, c2: color, ratio: real): color {
