@@ -25,8 +25,8 @@ void main() {
 
     float n = hash12(pixelPos) - 0.5;
     
-    vec3 finalRgb = tintColor.rgb + n * noiseIntensity;
-    float finalAlpha = clamp(tintColor.a + n * noiseIntensity * 0.5, 0.0, 1.0) * maskColor.a;
+    vec3 finalRgb = vec3(0.5) + n * noiseIntensity;
+    float finalAlpha = tintColor.a * maskColor.a * qt_Opacity;
 
-    fragColor = vec4(finalRgb * finalAlpha, finalAlpha) * qt_Opacity;
+    fragColor = vec4(finalRgb * finalAlpha, finalAlpha);
 }
