@@ -2,5 +2,15 @@
     "hello": {
         "name": "Hello",
         "description": "Says hi"
+    },
+    "settings": {
+        "name": "Settings",
+        "command": "../ipc.sh settings open",
+        "description": "Opens the settings menu."
+    },
+    "settings_folder": {
+        "name": "Settings Folder",
+        "command": "../ipc.sh settings open_folder",
+        "description": "Opens the settings folder."
     }
 }

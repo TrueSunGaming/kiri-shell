@@ -7,6 +7,7 @@ import QtQuick
 import KiriPlugin
 import qs.modules
 import qs.components
+import qs.services
 
 ShellRoot {
     id: root
@@ -65,6 +66,30 @@ ShellRoot {
 
         function toggle(): void {
             root.focusedScreen.launcher.open = !root.focusedScreen.launcher.open;
+        }
+    }
+
+    readonly property Component settingsMenuComponent: SettingsMenu {}
+
+    Scope {
+        id: settingsContainer
+    }
+
+    IpcHandler {
+        target: "settings"
+
+        function open(): void {
+            root.settingsMenuComponent.createObject(settingsContainer, {
+                    screen: root.focusedScreen.modelData
+            });
+        }
+
+        function open_folder(): void {
+            Config.openFolder();
+        }
+
+        function reload(): void {
+            Config.file.reload();
         }
     }
 }

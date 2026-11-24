@@ -2,11 +2,12 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import qs.services
 
 Singleton {
-    readonly property real accentHue: 178 / 360
-    readonly property real accentSaturation: 0.54
-    readonly property real accentLightness: 0.48
+    readonly property real accentHue: Config.data.style.colors.accentHue / 360
+    readonly property real accentSaturation: Config.data.style.colors.accentSaturation
+    readonly property real accentLightness: Config.data.style.colors.accentLightness
     readonly property color accent: Qt.hsla(accentHue, accentSaturation, accentLightness, 1)
 
     readonly property color text: Qt.hsla(0, 0, 0.95, 1)
