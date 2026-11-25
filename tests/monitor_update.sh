@@ -2,28 +2,34 @@
 
 # detects crashes when monitors change
 
-pkill quickshell
-pkill qs
-hyprctl reload
+{
+    just kill
+    hyprctl reload
 
-project_dir="$(dirname "$0")/.."
-qs -p $project_dir &
-qs_pid=$!
+    just run_built
+    qs_pid=$(cat /tmp/kiri-shell.pid)
 
-sleep 1
-hyprctl eval 'hl.monitor({ output = "DP-5", disabled = true })' >/dev/null
-sleep 1
-hyprctl reload >/dev/null #re-enables monitor
-sleep 1
+    sleep 1
+    hyprctl eval 'hl.monitor({ output = "DP-5", disabled = true })'
+    sleep 1
+    hyprctl reload
+    sleep 1
+} >/dev/null 2>&1
 
 if ! kill -0 "$qs_pid" 2>/dev/null; then
     wait "$qs_pid"
     exit_code=$?
     echo "Test failed (exit code: $exit_code)" >&2
 else
+    exit_code=0
     echo "Test passed"
 fi
 
-# removes error popups
-pkill qs
-pkill quickshell
+kill "$qs_pid"
+rm -f /tmp/kiri-shell.pid
+
+if [ "$exit_code" -eq 0 ]; then
+    exit 0
+else
+    exit 1
+fi

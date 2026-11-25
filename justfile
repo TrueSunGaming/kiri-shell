@@ -23,7 +23,10 @@ plugin:
     cmake --build plugin/build
 
 run_built:
+    #!/usr/bin/env sh
+
     nohup qs -p {{ justfile_directory() }} >/dev/null 2>&1 &
+    echo $! > /tmp/kiri-shell.pid
 
 run: build run_built
 
