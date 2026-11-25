@@ -7,35 +7,35 @@ default: build
 build: shaders plugin
 
 shaders:
-	#!/usr/bin/env sh
+    #!/usr/bin/env sh
 
-	for src in {{justfile_directory()}}/shaders/*.frag; do 
-		[ -f "$src" ] || continue
-		out="$src.qsb"
-		[ ! -f "$out" ] || [ "$src" -nt "$out" ] || continue
-		echo "Compiling $src..."
-		(qsb {{qsb_flags}} -o "$out" "$src" && echo "Compiled $src") &
-	done
-	wait
+    for src in {{ justfile_directory() }}/shaders/*.frag; do 
+    	[ -f "$src" ] || continue
+    	out="$src.qsb"
+    	[ ! -f "$out" ] || [ "$src" -nt "$out" ] || continue
+    	echo "Compiling $src..."
+    	(qsb {{ qsb_flags }} -o "$out" "$src" && echo "Compiled $src") &
+    done
+    wait
 
 plugin:
-	cmake -S plugin -B plugin/build -G Ninja
-	cmake --build plugin/build
+    cmake -S plugin -B plugin/build -G Ninja
+    cmake --build plugin/build
 
 run_built:
-	nohup qs -p {{justfile_directory()}} >/dev/null 2>&1 &
+    nohup qs -p {{ justfile_directory() }} >/dev/null 2>&1 &
 
 run: build run_built
 
 kill:
-	-killbuild quickshell
-	-killbuild qs
+    -killall quickshell
+    -killall qs
 
 restart: build kill run_built
 
 cloc:
-	cloc {{justfile_directory()}} --exclude-dir=build,.cache,.vscode --exclude-lang=YAML,Markdown
+    cloc {{ justfile_directory() }} --exclude-dir=build,.cache,.vscode --exclude-lang=YAML,Markdown
 
 reset_config: kill
-	rm -rf ~/.config/kiri-shell
-	just run_no_build
+    rm -rf ~/.config/kiri-shell
+    just run_no_build
