@@ -1,1 +1,0 @@
-cloc $(dirname "$0") --exclude-dir=build,.cache,.vscode --exclude-lang=YAML,Markdown
