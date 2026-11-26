@@ -11,6 +11,7 @@ ColumnLayout {
     id: root
 
     required property MprisPlayer player
+    property bool fixedSize: false
     readonly property real dataWidth: Sizing.relative(Sizing.mediaImageSize, 1)
 
     spacing: Sizing.sizeMicro
@@ -27,11 +28,18 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         spacing: Sizing.sizeXS
 
         Item {
-            Layout.preferredWidth: Sizing.mediaImageSize
-            Layout.preferredHeight: Layout.preferredWidth
+            // Layout.minimumHeight: Sizing.mediaImageSize
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
+
+            Binding on Layout.preferredHeight {
+                when: root.fixedSize
+                value: Sizing.mediaImageSize
+            }
 
             Image {
                 id: trackArt
@@ -63,9 +71,21 @@ ColumnLayout {
         }
 
         ColumnLayout {
-            Layout.preferredHeight: Sizing.mediaImageSize
-            Layout.preferredWidth: root.dataWidth
+            // Layout.preferredHeight: Sizing.mediaImageSize
+            Layout.fillHeight: true
+            // Layout.preferredWidth: root.dataWidth
+            Layout.fillWidth: true
             spacing: 0
+
+            Binding on Layout.preferredHeight {
+                when: root.fixedSize
+                value: Sizing.mediaImageSize
+            }
+
+            Binding on Layout.preferredWidth {
+                when: root.fixedSize
+                value: root.dataWidth
+            }
 
             StyleText {
                 Layout.fillWidth: true

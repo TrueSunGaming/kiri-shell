@@ -24,4 +24,5 @@ Singleton {
 
     readonly property real mediaImageSize: relative(fontSize, 5)
     readonly property real notificationWidth: relative(fontSize, 6.5)
+    readonly property real widgetGridSize: relative(fontSize, 3)
 }

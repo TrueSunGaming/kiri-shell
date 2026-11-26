@@ -10,6 +10,7 @@ import qs.components
 import qs.data
 import qs.modules.widgets
 import qs.services
+import qs.util
 
 PanelWindow {
     id: root
@@ -41,15 +42,31 @@ PanelWindow {
         visible: root.animProgress > 0
         opacity: root.animProgress
 
-        ClockWidget {
-            id: clock
+        WidgetGrid {
+            id: grid
+            anchors.fill: parent
+
+            items: [
+            GridItem {
+                row: 0
+                column: 0
+                columnSpan: 7
+                rowSpan: 4
+                item: MediaWidget {}
+            },
+            GridItem {
+                row: 2
+                column: 9
+                columnSpan: 10
+                rowSpan: 3
+                item: MediaWidget {}
+            }
+            ]
         }
 
-        ColumnLayout {
-            anchors.horizontalCenter: clock.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-
-            MediaWidget {}
+        TapHandler {
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onTapped: console.log("hi")
         }
     }
 }
