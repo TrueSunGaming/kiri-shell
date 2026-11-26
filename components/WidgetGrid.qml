@@ -19,8 +19,6 @@ Item {
     readonly property real gridWidth: cellWidth * columns + columnSpacing * (columns - 1)
     readonly property real gridHeight: cellHeight * rows + rowSpacing * (rows - 1)
 
-    onColumnsChanged: console.log(columns)
-
     Item {
         id: gridContainer
 
