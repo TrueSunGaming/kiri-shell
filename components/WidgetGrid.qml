@@ -2,20 +2,34 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs.data
+import qs.services
 import qs.util
 
 Item {
     id: root
 
-    property real cellWidth: Sizing.widgetGridSize
-    property real cellHeight: cellWidth
+    property real cellPreferredWidth: Sizing.widgetGridSize
+    property real cellPreferredHeight: cellPreferredWidth
     property real columnSpacing: Sizing.sizeM
     property real rowSpacing: Sizing.sizeM
     property list<GridItem> items: []
 
-    // max{n∈Z : wn+s(n-1)<=x} = floor((x+s)/(w+s))
-    readonly property int columns: Math.max(1, Math.floor((width + columnSpacing) / (cellWidth + columnSpacing)))
-    readonly property int rows: Math.max(1, Math.floor((height + columnSpacing) / (cellHeight + columnSpacing)))
+    function cellCount(space: real, size: real, spacing: real): int {
+        // max{n∈Z : wn+s(n-1)<=x} = floor((x+s)/(w+s))
+        return Math.max(1, Math.floor((space + spacing) / (size + spacing)));
+    }
+
+    function correctSize(original: real, space: real, spacing: real): real {
+        // if (Config.data.desktop.forceCenterWidgets != "grid") return original;
+        const count = cellCount(space, original, spacing);
+        return (space - spacing * (count - 1)) / count;
+    }
+
+    readonly property real cellWidth: correctSize(cellPreferredWidth, width, columnSpacing)
+    readonly property real cellHeight: correctSize(cellPreferredHeight, height, rowSpacing)
+
+    readonly property int columns: cellCount(width, cellWidth, columnSpacing)
+    readonly property int rows: cellCount(height, cellHeight, rowSpacing)
     readonly property real gridWidth: cellWidth * columns + columnSpacing * (columns - 1)
     readonly property real gridHeight: cellHeight * rows + rowSpacing * (rows - 1)
 
@@ -39,19 +53,37 @@ Item {
 
                 required property GridItem modelData
 
-                x: modelData.getX(root.cellWidth, root.columnSpacing)
-                y: modelData.getY(root.cellHeight, root.rowSpacing)
-                width: root.cellWidth * modelData.columnSpan + root.columnSpacing * Math.max(0, modelData.columnSpan - 1)
-                height: root.cellHeight * modelData.rowSpan + root.rowSpacing * Math.max(0, modelData.rowSpan - 1)
+                readonly property point pos: modelData.getScreenPos(root)
+                x: pos.x
+                y: pos.y
 
-                children: [modelData.item]
+                readonly property point size: modelData.getScreenSize(root)
+                width: size.x
+                height: size.y
 
                 Binding {
                     target: modelData.item
+                    property: "parent"
+                    value: gridItem
+                }
+
+                Binding {
+                    target: modelData.item
+                    when: modelData.item.parent == gridItem
                     property: "anchors.fill"
                     value: gridItem
                 }
+
+                DebugBorder {}
             }
         }
+
+        DebugBorder {
+            border.color: "cyan"
+        }
+    }
+
+    DebugBorder {
+        border.color: "cyan"
     }
 }

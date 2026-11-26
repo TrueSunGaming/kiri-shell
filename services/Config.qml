@@ -1,8 +1,10 @@
 pragma Singleton
 
 import QtCore
+import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.util
 
 Singleton {
     id: root
@@ -10,6 +12,8 @@ Singleton {
     readonly property string configFolderName: "kiri-shell"
     readonly property string configParentFolder: Quickshell.env("XDG_CONFIG_HOME") || StandardPaths.writableLocation(StandardPaths.ConfigLocation)
     readonly property string configDir: `${configParentFolder}/${configFolderName}`
+
+    readonly property Component jsonGridItemComponent: Qt.createComponent("../util/JsonGridItem.qml")
 
     property alias file: configFile
     property alias data: configData
@@ -42,6 +46,15 @@ Singleton {
                     property real accentSaturation: 0.54
                     property real accentLightness: 0.48
                 }
+            }
+
+            property JsonObject desktop: JsonObject {
+                property string forceCenterWidgets: "off"
+                property var widgets: []
+            }
+
+            property JsonObject debug: JsonObject {
+                property bool showBorders: false
             }
         }
     }

@@ -10,34 +10,54 @@ Item {
     property bool showDate: true
     property bool showSeconds: false
 
-    implicitWidth: Math.max(clock.trueWidth, showDate ? day.trueWidth : 0, 1)
-    implicitHeight: clock.trueHeight + (showDate ? day.trueHeight + spacing : 0)
+    readonly property real fontSize: Math.floor((width / clockTest.trueWidth) * clockTest.font.pixelSize)
+    readonly property real totalHeight: clock.trueHeight + spacing + day.trueHeight
+    readonly property bool actuallyShowDate: showDate && totalHeight <= height
 
-    GlassText {
-        id: clock
+    StyleText {
+        id: clockTest
+        visible: false
 
-        anchors.top: parent.top
-        anchors.topMargin: verticalCorrection
-        anchors.left: parent.left
-        anchors.leftMargin: horizontalCorrection
-
-        metrics.text: root.showSeconds ? "00:00:00 AM" : "00:00 AM"
-        text: root.showSeconds ? Clock.long12hr : Clock.short12hr
-        weightOverride: Font.Black
-        font.pixelSize: Sizing.relative(Sizing.fontSize, 5.5)
+        text: root.showSeconds ? "00:00:00 AM" : "00:00 AM"
+        weightOverride: clock.weightOverride
     }
 
-    GlassText {
-        id: day
+    Item {
+        anchors.centerIn: parent
+        implicitWidth: clock.trueWidth
+        implicitHeight: root.actuallyShowDate ? root.totalHeight : clock.trueHeight
 
-        anchors.top: clock.bottom
-        anchors.topMargin: verticalCorrection + clock.verticalCorrection + root.spacing
-        anchors.horizontalCenter: clock.horizontalCenter
+        DebugBorder {
+            border.color: "orange"
+        }
 
-        visible: root.showDate
+        GlassText {
+            id: clock
 
-        text: Clock.longDate
-        weightOverride: Font.ExtraBold
-        font.pixelSize: Sizing.relative(Sizing.fontSize, 3)
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: verticalCorrection
+
+            metrics.text: root.showSeconds ? "00:00:00 AM" : "00:00 AM"
+            text: root.showSeconds ? Clock.long12hr : Clock.short12hr
+            // text: metrics.text
+            weightOverride: Font.Black
+            font.pixelSize: root.fontSize
+        }
+
+        GlassText {
+            id: day
+
+            anchors.top: clock.bottom
+            anchors.topMargin: verticalCorrection + clock.verticalCorrection + root.spacing
+            anchors.horizontalCenter: clock.horizontalCenter
+
+            visible: root.actuallyShowDate
+
+            metrics.text: "Wednesday, September 30"
+            text: Clock.longDate
+            weightOverride: Font.ExtraBold
+            font.pixelSize: Sizing.relative(root.fontSize, -2.5) // never longer than time
+        }
     }
 }

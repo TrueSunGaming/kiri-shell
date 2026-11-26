@@ -1,0 +1,12 @@
+{
+    "media": {
+        "component": "MediaWidget",
+        "defaultWidth": 10,
+        "defaultHeight": 5
+    },
+    "clock": {
+        "component": "ClockWidget",
+        "defaultWidth": 14,
+        "defaultHeight": 4
+    }
+}

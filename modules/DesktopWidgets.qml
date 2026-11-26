@@ -18,6 +18,8 @@ PanelWindow {
     required property ShellScreen currentScreen
     screen: currentScreen
 
+    readonly property Component loaderGridItemComponent: Qt.createComponent("../util/LoaderGridItem.qml")
+
     property bool desktopShown: Hypr.getMonitor(screen)?.floatingOnly ?? true
     property real animProgress: desktopShown ? 1 : 0
 
@@ -38,7 +40,7 @@ PanelWindow {
 
     Item {
         anchors.fill: parent
-        anchors.margins: Sizing.sizeXXL
+        anchors.margins: Sizing.sizeM
         visible: root.animProgress > 0
         opacity: root.animProgress
 
@@ -46,22 +48,15 @@ PanelWindow {
             id: grid
             anchors.fill: parent
 
-            items: [
-            GridItem {
-                row: 0
-                column: 0
-                columnSpan: 7
-                rowSpan: 4
-                item: MediaWidget {}
-            },
-            GridItem {
-                row: 2
-                column: 9
-                columnSpan: 10
-                rowSpan: 3
-                item: MediaWidget {}
-            }
-            ]
+            items: WidgetConfig.widgets.map((v) => loaderGridItemComponent.createObject(null, {
+                        widgetID: v.widgetID,
+                        anchor: v.anchor,
+                        row: v.row,
+                        column: v.column,
+                        rowSpan: v.rowSpan,
+                        columnSpan: v.columnSpan,
+                        options: v.options
+            }))
         }
 
         TapHandler {
