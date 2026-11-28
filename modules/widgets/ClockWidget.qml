@@ -43,6 +43,7 @@ Item {
             // text: metrics.text
             weightOverride: Font.Black
             font.pixelSize: root.fontSize
+            color: Colors.accentShield
         }
 
         GlassText {
@@ -58,6 +59,7 @@ Item {
             text: Clock.longDate
             weightOverride: Font.ExtraBold
             font.pixelSize: Sizing.relative(root.fontSize, -2.5) // never longer than time
+            color: Colors.accentShield
         }
     }
 }
