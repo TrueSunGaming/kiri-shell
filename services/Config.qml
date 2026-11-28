@@ -56,6 +56,10 @@ Singleton {
             property JsonObject debug: JsonObject {
                 property bool showBorders: false
             }
+
+            property JsonObject launcher: JsonObject {
+                property var customScripts: ({})
+            }
         }
     }
 }

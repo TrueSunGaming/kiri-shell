@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.services
 import qs.util
 
 Singleton {
@@ -20,7 +21,7 @@ Singleton {
         id: scriptInstantiator
 
         model: ScriptModel {
-            values: Object.keys(root.jsonData)
+            values: [...Object.keys(root.jsonData), ...Object.keys(Config.data.launcher.customScripts)]
         }
 
         delegate: ScriptData {
@@ -38,6 +39,6 @@ Singleton {
     }
 
     function getScript(scriptID: string): var {
-        return jsonData[scriptID] ?? null;
+        return jsonData[scriptID] ?? Config.data.launcher.customScripts[scriptID] ?? null;
     }
 }
